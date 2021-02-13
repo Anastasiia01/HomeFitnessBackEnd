@@ -3,13 +3,14 @@ from flask import Flask, render_template, request, redirect, url_for, session
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'c6f0cc646e644b15d920872d4d2756d480e455f447124405'
-app.config['DEBUG'] = True
+#app.config.from_pyfile('config.py')
+app.config.from_object('config.Config')
+
 
 
 if __name__ == "main":
     app.run()
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET','POST'])
 def index():
     return "hello"
