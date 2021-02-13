@@ -4,8 +4,9 @@ from .datalayer import DataLayer
 
 
 app = Flask(__name__)
-app.config.from_object('config.Config')
+app.config.from_object('app.config.Config')
 dataLayer = DataLayer(app.config['GOOGLE_API_KEY'])
+print(dataLayer)
 
 
 

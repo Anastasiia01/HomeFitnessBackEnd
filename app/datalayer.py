@@ -7,3 +7,8 @@ class DataLayer:
     def __init__(self, key):
         self.api_key = key
     
+    def __str__(self):
+        return "key: " + self.api_key
+
+    
+    
