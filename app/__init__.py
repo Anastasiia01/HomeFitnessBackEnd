@@ -14,6 +14,8 @@ print(dataLayer)
 if __name__ == "main":
     app.run()
 
-@app.route('/', methods=['GET','POST'])
+@app.route('/', methods=['POST'])
 def index():
-    return "hello"
+    request_data = request.get_json() #get parameters from request
+    channel_id = request_data['channel_id']
+    return "The Youtube channel ID is: {}".format(channel_id)
