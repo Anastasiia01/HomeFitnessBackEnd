@@ -5,6 +5,7 @@ from .datalayer import DataLayer
 
 app = Flask(__name__)
 app.config.from_object('app.config.Config')
+app.config.update()
 dataLayer = DataLayer(app.config['GOOGLE_API_KEY'])
 
 if __name__ == "main":
@@ -17,6 +18,17 @@ def get_channel_id():
         channel_name: str
     Returns channel ID.
     """
+    request_data = request.get_json()
+    channel_name = None
+
+    data={}
+
+    if request_data:
+        if 'channel_name' in request_data:
+            channel_name = request_data['channel_name']
+            data = dataLayer.channel_search(channel_name)
+    return data
+    #return "channel ID"
 
 @app.route('/video', methods=['POST'])
 def get_video():
@@ -31,8 +43,16 @@ def get_video():
     request_data = request.get_json() #get parameters from request
 
     channel_id = None
+    workout_type = None
+    mins = None
+
 
     if request_data:
         if 'channel_id' in request_data:
             channel_id = request_data['channel_id']
+        if 'workout_type' in request_data:
+            workout_type = request_data['workout_type']
+        if 'mins' in request_data:
+            mins = request_data['mins']
+
     return "The Youtube channel ID is: {}".format(channel_id)
