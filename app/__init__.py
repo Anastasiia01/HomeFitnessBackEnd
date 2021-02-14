@@ -43,16 +43,18 @@ def get_video():
     request_data = request.get_json() #get parameters from request
 
     channel_id = None
-    workout_type = None
+    query = None
     mins = None
 
+    data={}
 
     if request_data:
         if 'channel_id' in request_data:
             channel_id = request_data['channel_id']
         if 'workout_type' in request_data:
-            workout_type = request_data['workout_type']
+            query = request_data['workout_type']+'+workout'
         if 'mins' in request_data:
             mins = request_data['mins']
-
-    return "The Youtube channel ID is: {}".format(channel_id)
+    if not query or not mins:
+        return data
+    return dataLayer.video_search(channel_id, query, mins)
