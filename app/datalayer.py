@@ -1,7 +1,7 @@
 """Datalayer that will allow our server to utilize Youtube Data API"""
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-
+from isodate import parse_duration
 
 class DataLayer:
     def __init__(self, key):
@@ -23,7 +23,6 @@ class DataLayer:
             maxResults=1,
             q=query
         ).execute()
-        print(search_response)
         if (search_response['items']):
             result = search_response['items'][0]['snippet']
         return result
@@ -35,11 +34,13 @@ class DataLayer:
             fields='items(contentDetails(duration))',
             part='contentDetails'
         ).execute()
-        print(response)
         if (response['items']):
-            result = response['items'][0]['contentDetails']['duration']
-        print(result)        
-        return 28
+            result = response['items'][0]['contentDetails']['duration'] 
+        dur = parse_duration(result)  
+        res = dur.total_seconds()
+        res=res/60  
+        return res
+
 
     def video_search(self, channel_id, query, mins):
         """ publishedAfter:datetime ("RFC 3339 formatted date-time value (1970-01-01T00:00:00Z)"),
@@ -66,14 +67,11 @@ class DataLayer:
             videoDuration=duration,
             videoEmbeddable = 'true'
         ).execute()
-        print(search_response)
         if (search_response['items']):
             for video in search_response['items']:
-                print(video) #for debugging
                 video_id = video['id']['videoId']
                 dur=self.get_video_duration(video_id)
                 if abs(dur-mins)<5:
-                    print("here")
                     result['id']=video_id
                     result['title']=video['snippet']['title']
                     return result
