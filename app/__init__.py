@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from .datalayer import DataLayer
-#import requests
-
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config.from_object('app.config.Config')
 app.config.update()
 dataLayer = DataLayer(app.config['GOOGLE_API_KEY'])
